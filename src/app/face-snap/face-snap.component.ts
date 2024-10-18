@@ -1,39 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FaceSnap } from '../models/face-snap';
+import { DatePipe, NgClass, NgStyle, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-face-snap',
   standalone: true,
-  imports: [],
+  imports: [
+    NgStyle,
+    NgClass,
+    DatePipe,
+    TitleCasePipe
+  ],
   templateUrl: './face-snap.component.html',
   styleUrl: './face-snap.component.scss'
 })
-export class FaceSnapComponent implements OnInit{
-  title!: string;
-  description!: string;
-  createAt!: Date;
-  snaps!: number;
-  imageURL!: string;
+export class FaceSnapComponent implements OnInit {
+  @Input() faceSnap!: FaceSnap;
+
+
   snapButtonText!: string;
   isSnap!: boolean;
 
   ngOnInit(): void {
-    this.title = 'Vegeta';
-    this.description = 'Best anime character';
-    this.createAt = new Date;
-    this.snaps = 154564;
-    this.imageURL = 'https://static.wikia.nocookie.net/dragonball/images/2/2c/Vegeta_Manga.png';
     this.snapButtonText = "Oh Snap!";
     this.isSnap = false;
   }
   onSnap(): void {
-    if (this.isSnap === false){
-    this.snaps++;
+    if (this.isSnap === false) {
+      this.snap();
+    } else if (this.isSnap === true) {
+      this.unSnap();
+    }
+  }
+
+  unSnap() {
+    this.faceSnap.removeSnap();
+    this.snapButtonText = 'Oh Snap!';
+    this.isSnap = false;
+  }
+
+  snap() {
+    this.faceSnap.addSnap();
+    this.snapButtonText = 'Oops, un Snap!';
     this.isSnap = true;
-    this.snapButtonText = "Oops, un Snap";
-  } 
-    else if (this.isSnap === true){
-      this.snaps--;
-      this.isSnap = false;
-      this.snapButtonText = "Oh Snap!";}
   }
 }
